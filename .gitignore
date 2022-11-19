@@ -3,3 +3,5 @@
 *.iml
 cmake-build-*
 *.Identifier
+out/*
+!out
