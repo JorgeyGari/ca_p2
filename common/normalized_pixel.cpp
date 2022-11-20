@@ -5,7 +5,7 @@
 namespace images::common {
 
   namespace {
-    constexpr double intensity_threshold = 0.04045;
+  [[maybe_unused]] constexpr double intensity_threshold = 0.04045;
     constexpr double intensity_divisor1 = 12.92;
     constexpr double intensity_divisor2 = 1.055;
     constexpr double intensity_delta = 0.055;
@@ -19,14 +19,14 @@ namespace images::common {
   }
 
   void normalized_pixel::intensity_transform() noexcept {
-//#pragma omp parallel for default(none) private(color) shared(intensity_threshold, intensity_divisor1, intensity_delta, intensity_divisor2, intensity_exponent)  // For some reason this parallelization makes the process time 10x slower
-    for (auto & c: color) {
-      if (c <= intensity_threshold) {
-//#pragma omp atomic
-        c /= intensity_divisor1;
+//#pragma omp parallel for default(none) firstprivate(color)   // For some reason this parallelization makes the process time 10x slower
+    for (int i = 0; i < static_cast<int>(color.size()); ++i) {
+      if (color[i] <= 0.04045) {
+//#pragma omp atomic update
+        color[i] /= 12.92;
       }
       else {
-        c = std::pow((c + intensity_delta) / intensity_divisor2, intensity_exponent);
+        color[i] = std::pow((color[i] + 0.055) / 1.055, 2.4);
       }
     }
   }
