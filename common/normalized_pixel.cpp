@@ -1,5 +1,6 @@
 #include "normalized_pixel.hpp"
 #include <cmath>
+#include <omp.h>
 
 namespace images::common {
 
@@ -9,7 +10,7 @@ namespace images::common {
     constexpr double intensity_divisor2 = 1.055;
     constexpr double intensity_delta = 0.055;
     constexpr double intensity_exponent = 2.4;
-    constexpr double intensity_expornent_inv = 1.0 / intensity_exponent;
+    constexpr double intensity_exponent_inv = 1.0 / intensity_exponent;
     constexpr double gamma_threshold = 0.003108;
 
     constexpr double red_coefficient = 0.2126;
@@ -18,8 +19,10 @@ namespace images::common {
   }
 
   void normalized_pixel::intensity_transform() noexcept {
+//#pragma omp parallel for default(none) private(color) shared(intensity_threshold, intensity_divisor1, intensity_delta, intensity_divisor2, intensity_exponent)  // For some reason this parallelization makes the process time 10x slower
     for (auto & c: color) {
       if (c <= intensity_threshold) {
+//#pragma omp atomic
         c /= intensity_divisor1;
       }
       else {
@@ -36,7 +39,7 @@ namespace images::common {
     if (g <= gamma_threshold) {
       return intensity_divisor1 * g;
     }
-    return intensity_divisor2 * std::pow(g, intensity_expornent_inv) - intensity_delta;
+    return intensity_divisor2 * std::pow(g, intensity_exponent_inv) - intensity_delta;
   }
 
   uint8_t gray_denormalize(double g) noexcept {

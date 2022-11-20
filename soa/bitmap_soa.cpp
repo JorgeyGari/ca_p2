@@ -78,7 +78,6 @@ void bitmap_soa::to_gray() noexcept {
 
 bool bitmap_soa::is_gray() const noexcept {
   const auto max = std::ssize(pixels);
-//#pragma omp parallel for default(none) shared(max)
   for (int i = 0; i < max; ++i) {
     const auto p = get_pixel(i);
     if (!p.is_gray()) {
