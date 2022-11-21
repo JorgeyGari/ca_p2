@@ -20,11 +20,11 @@ namespace images::common {
 
   void normalized_pixel::intensity_transform() noexcept {
     for (int i = 0; i < static_cast<int>(color.size()); ++i) {
-      if (color[i] <= 0.04045) {
-        color[i] /= 12.92;
+      if (color[i] <= intensity_threshold) {
+        color[i] /= intensity_divisor1;
       }
       else {
-        color[i] = std::pow((color[i] + 0.055) / 1.055, 2.4);
+        color[i] = std::pow((color[i] + intensity_delta) / intensity_divisor2, intensity_exponent);
       }
     }
   }
