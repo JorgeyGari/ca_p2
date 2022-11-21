@@ -5,7 +5,7 @@
 namespace images::common {
 
   namespace {
-    constexpr double intensity_threshold = 0.04045;
+  [[maybe_unused]] constexpr double intensity_threshold = 0.04045;
     constexpr double intensity_divisor1 = 12.92;
     constexpr double intensity_divisor2 = 1.055;
     constexpr double intensity_delta = 0.055;
