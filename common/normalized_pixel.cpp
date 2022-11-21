@@ -19,14 +19,12 @@ namespace images::common {
   }
 
   void normalized_pixel::intensity_transform() noexcept {
-//#pragma omp parallel for default(none) private(color) shared(intensity_threshold, intensity_divisor1, intensity_delta, intensity_divisor2, intensity_exponent)  // For some reason this parallelization makes the process time 10x slower
-    for (auto & c: color) {
-      if (c <= intensity_threshold) {
-//#pragma omp atomic
-        c /= intensity_divisor1;
+    for (int i = 0; i < static_cast<int>(color.size()); ++i) {
+      if (color[i] <= intensity_threshold) {
+        color[i] /= intensity_divisor1;
       }
       else {
-        c = std::pow((c + intensity_delta) / intensity_divisor2, intensity_exponent);
+        color[i] = std::pow((color[i] + intensity_delta) / intensity_divisor2, intensity_exponent);
       }
     }
   }
