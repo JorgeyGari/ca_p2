@@ -59,6 +59,7 @@ namespace images::aos {
 
   void bitmap_aos::to_gray() noexcept {
     const auto max = std::ssize(pixels);
+#pragma omp parallel for default(none) shared(max)
     for (int i = 0; i < max; ++i) {
       pixels[i] = pixels[i].to_gray_corrected();
     }
