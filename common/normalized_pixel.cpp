@@ -19,10 +19,8 @@ namespace images::common {
   }
 
   void normalized_pixel::intensity_transform() noexcept {
-//#pragma omp parallel for default(none) firstprivate(color)   // For some reason this parallelization makes the process time 10x slower
     for (int i = 0; i < static_cast<int>(color.size()); ++i) {
       if (color[i] <= 0.04045) {
-//#pragma omp atomic update
         color[i] /= 12.92;
       }
       else {
