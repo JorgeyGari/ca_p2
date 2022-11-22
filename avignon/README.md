@@ -15,6 +15,7 @@ auto diff = duration_cast<std::chrono::microseconds>(t2 - t1);
 std :: cout << "Time= " << diff.count() << "microseconds\n";
 ```
 **Remember that this code is not supposed to be in the final version.**
+
 2. Upload your local copy of the repo to Avignon using the comand `scp -r <dir_to_upload> user@avignon.lab.inf.uc3m.es:<path_to_destination>` (scp stands for "safe copy"). Here is an example: `scp -r ca_p2/ a0452172@avignon.lab.inf.uc3m.es:~/ComputerArchitecture`.
 3. In Avignon, run the [build configuration script](avignon/build.sh) **with `sbatch`**. This file sets up a release configuration and changes the compiler to G++-12, and then builds the project. The binaries will be located at `release`.
 4. Now that you have the compiled version of `img-aos` and `img-soa`, you can run them (**with `sbatch`**). Inside of [this folder](avignon) there are scripts for running each of the functions (`gauss`, `histo` and `mono`) with 1, 2, 4, 8 and 16 threads (using environment variables) in both versions of the program.
