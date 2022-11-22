@@ -1,0 +1,50 @@
+--- SEQUENTIAL ---
+aos
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+Time= 5470723 microseconds
+File: in/sabatini.bmp time(6179117)
+  Load time: 175737
+  Process time: 5470820
+  Store time: 6003380
+--- 2-THREAD ---
+aos
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+Time= 2751106 microseconds
+File: in/sabatini.bmp time(3409875)
+  Load time: 132664
+  Process time: 2751213
+  Store time: 3277210
+--- 4-THREAD ---
+aos
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+Time= 1459930 microseconds
+File: in/sabatini.bmp time(2120841)
+  Load time: 130440
+  Process time: 1460027
+  Store time: 1990400
+--- 8-THREAD ---
+aos
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+Time= 1464922 microseconds
+File: in/sabatini.bmp time(2120622)
+  Load time: 131479
+  Process time: 1465017
+  Store time: 1989143
+--- 16-THREAD ---
+aos
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+Time= 1486745 microseconds
+File: in/sabatini.bmp time(2131802)
+  Load time: 120507
+  Process time: 1486846
+  Store time: 2011294
