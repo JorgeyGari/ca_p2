@@ -63,7 +63,7 @@ void bitmap_soa::write(const std::filesystem::path &out_name) {
 void bitmap_soa::to_gray() noexcept {
   {
     const auto max = header.image_size();
-#pragma omp parallel for default(none) shared(max) schedule(static)
+#pragma omp parallel for default(none) shared(max)
       for (long i = 0; i < max; ++i) {
         const auto gray_level =
             to_gray_corrected(pixels[red_channel][i], pixels[green_channel][i],
