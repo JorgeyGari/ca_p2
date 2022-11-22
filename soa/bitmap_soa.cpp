@@ -1,7 +1,6 @@
 #include "bitmap_soa.hpp"
 #include "common/file_error.hpp"
 #include <fstream>
-#include <omp.h>
 
 namespace images::soa {
 
