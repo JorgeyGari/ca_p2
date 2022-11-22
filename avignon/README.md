@@ -1,6 +1,8 @@
 # How to test in Avignon
 Once you have parallelized your function, it is time to upload your code to Avignon. Here are some steps to do this.
 
+Before following these steps, **make sure that you have linked the OpenMP library** to the libraries `aos` and `soa` in their respective `CMakeLists.txt` files.
+
 1. Modify your code to measure how long your function takes to run. To do this, you must:
 * Include the `<chrono>` library by adding `#include <chrono>` at the beginning of the files `bitmap_aos.hpp` and `bitmap_soa.hpp`.
 * Add this code snippet at the beginning of your function to create a "start" clock:
