@@ -1,5 +1,5 @@
 # How to test in Avignon
-Once you have made a pull request and merged your branches with `main`, it is time to upload your code to Avignon. Here are some steps to do this.
+Once you have parallelized your function, it is time to upload your code to Avignon. Here are some steps to do this.
 
 1. Modify your code to measure how long your function takes to run. To do this, you must:
 * Include the `<chrono>` library by adding `#include <chrono>` at the beginning of the files `bitmap_aos.hpp` and `bitmap_soa.hpp`.
@@ -20,3 +20,5 @@ std :: cout << "Time= " << diff.count() << "microseconds\n";
 3. In Avignon, run the [build configuration script](build.sh) **with `sbatch`**. This file sets up a release configuration and changes the compiler to G++-12, and then builds the project. The binaries will be located at `release`.
 4. Now that you have the compiled version of `img-aos` and `img-soa`, you can run them (**with `sbatch`**). Inside of [this folder]() there are scripts called `all_env_<function>.sh` for running each of the functions (`gauss`, `histo` and `mono`) with 1, 2, 4, 8 and 16 threads (using environment variables) in both versions of the program.
 5. Gather the data. **It is recommended that you try running everything five times** so we can have more accurate data to use in the report. You can use [this spreadsheet](mono_results.xlsx) as a template.
+
+And that's it! The speedup factors for 1, 2 and 4 threads should be close to the number of threads (linear speedup). Avignon only has four cores, so it won't take advantage of having 8 or 16 threads and **the speedup factor is supposed to be the same as with 4 threads**. When you are satisfied with your results, remember to make a pull request on your branch(es) and merge with `main`. Remember to merge the version **without `<chrono>`** (we only use `<chrono>` for testing purposes). 
