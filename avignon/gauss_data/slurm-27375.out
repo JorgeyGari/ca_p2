@@ -1,0 +1,45 @@
+--- SEQUENTIAL ---
+soa
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+File: in/sabatini.bmp time(8786077)
+  Load time: 522313
+  Process time: 7139476
+  Store time: 8263763
+--- 2-THREAD ---
+soa
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+File: in/sabatini.bmp time(5273980)
+  Load time: 484611
+  Process time: 3592279
+  Store time: 4789368
+--- 4-THREAD ---
+soa
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+File: in/sabatini.bmp time(3607881)
+  Load time: 474937
+  Process time: 1905284
+  Store time: 3132943
+--- 8-THREAD ---
+soa
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+File: in/sabatini.bmp time(3617151)
+  Load time: 483715
+  Process time: 1945370
+  Store time: 3133435
+--- 16-THREAD ---
+soa
+Input path: "in"
+Output path: "out"
+File: in/sabatini.bmp
+File: in/sabatini.bmp time(3605228)
+  Load time: 478884
+  Process time: 1920439
+  Store time: 3126343
