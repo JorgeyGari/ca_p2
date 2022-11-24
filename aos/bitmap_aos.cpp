@@ -1,7 +1,6 @@
 #include "bitmap_aos.hpp"
 #include "common/file_error.hpp"
 #include <fstream>
-#include <chrono>
 
 namespace images::aos {
 
@@ -120,6 +119,13 @@ namespace images::aos {
 
     void bitmap_aos::print_info(std::ostream &os) const noexcept {
         header.print_info(os);
+        }
+
+void bitmap_aos::to_gray() noexcept {
+    const auto max = std::ssize(pixels);
+#pragma omp parallel for default(none) shared(max)
+    for (int i = 0; i < max; ++i) {
+      pixels[i] = pixels[i].to_gray_corrected();
     }
 
     pixel bitmap_aos::get_pixel(int r, int c) const noexcept {
@@ -146,6 +152,62 @@ namespace images::aos {
             }
         }
         std::cout << "All pixels are equal\n";
+    *this = result;
+  }
+
+  histogram bitmap_aos::generate_histogram() const noexcept {
+      histogram histo;
+      const int pixel_count = width() * height();
+      int i;
+      int nthreads;
+#pragma omp parallel default(none) shared(nthreads)
+      {
+    #pragma omp single
+          {
+              nthreads = omp_get_num_threads();
+          }
+      }
+      std::vector<histogram> h(nthreads);
+
+#pragma omp parallel default(none) shared(pixel_count, h)
+      {
+    #pragma omp for
+      for (i = 0; i < pixel_count; ++i) {
+          h[omp_get_thread_num()].add_color(pixels[i]);
+      }
+  }
+      //now I have to merge all the h[i] into histo
+      histo.merge_histos(h, nthreads);
+
+      return histo;
+  }
+
+  void bitmap_aos::print_info(std::ostream & os) const noexcept {
+    header.print_info(os);
+  }
+
+  pixel bitmap_aos::get_pixel(int r, int c) const noexcept {
+    return pixels[index(r, c)];
+  }
+
+  void bitmap_aos::set_pixel(int r, int c, pixel p) noexcept {
+    pixels[index(r, c)] = p;
+  }
+
+  int bitmap_aos::index(int r, int c) const noexcept {
+    return r * width() + c;
+  }
+
+  void print_diff(const bitmap_aos & bm1, const bitmap_aos & bm2) noexcept {
+    std::cout << "Printing differences:\n";
+    print_diff(bm1.header, bm2.header);
+    const auto num_pixels = std::ssize(bm1.pixels);
+    for (int i = 0; i < num_pixels; ++i) {
+      if (bm1.pixels[i] != bm2.pixels[i]) {
+        std::cout << "  Pixel " << i << " is different";
+        std::cout << bm1.pixels[i] << " -- " << bm2.pixels[i] << "\n";
+        return;
+      }
     }
 
 
