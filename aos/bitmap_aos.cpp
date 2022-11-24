@@ -1,7 +1,7 @@
 #include "bitmap_aos.hpp"
 #include "common/file_error.hpp"
 #include <fstream>
-
+#include<omp.h>
 namespace images::aos {
 
   bitmap_aos::bitmap_aos(int w, int h) : header{w, h}, pixels(static_cast<std::size_t>(w * h)) {
@@ -106,14 +106,30 @@ namespace images::aos {
   }
 
   histogram bitmap_aos::generate_histogram() const noexcept {
-    histogram histo;
-    const int pixel_count = width() * height();
-#pragma omp parallel for default(none) shared(pixel_count, histo)
-    for (int i = 0; i < pixel_count; ++i) {
-//#pragma omp critical
-      histo.add_color(pixels[i]);
-    }
-    return histo;
+      histogram histo;
+      const int pixel_count = width() * height();
+      int i;
+      int nthreads;
+#pragma omp parallel default(none) shared(nthreads)
+      {
+    #pragma omp single
+          {
+              nthreads = omp_get_num_threads();
+          }
+      }
+      std::vector<histogram> h(nthreads);
+
+#pragma omp parallel default(none) shared(pixel_count, h)
+      {
+    #pragma omp for //default(none) shared(pixel_count, histo)
+      for (i = 0; i < pixel_count; ++i) {
+          h[omp_get_thread_num()].add_color(pixels[i]);
+      }
+  }
+      //now I have to merge all the h[i] into histo
+      histo.merge_histos(h, nthreads);
+
+      return histo;
   }
 
   void bitmap_aos::print_info(std::ostream & os) const noexcept {

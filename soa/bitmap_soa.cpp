@@ -1,6 +1,7 @@
 #include "bitmap_soa.hpp"
 #include "common/file_error.hpp"
 #include <fstream>
+#include<omp.h>
 
 namespace images::soa {
 
@@ -126,11 +127,27 @@ void bitmap_soa::gauss() noexcept {
 histogram bitmap_soa::generate_histogram() const noexcept {
   histogram histo;
   const int pixel_count = width() * height();
-  for (int i = 0; i < pixel_count; ++i) {
-    histo.add_red(pixels[red_channel][i]);
-    histo.add_green(pixels[green_channel][i]);
-    histo.add_blue(pixels[blue_channel][i]);
-  }
+    int i;
+    int nthreads;
+#pragma omp parallel default(none) shared(nthreads)
+    {
+#pragma omp single
+        {
+            nthreads = omp_get_num_threads();
+        }
+    }
+    std::vector<histogram> h(nthreads);
+
+#pragma omp parallel default(none) shared(pixel_count, h)
+    {
+#pragma omp for
+        for (i = 0; i < pixel_count; ++i) {
+            h[omp_get_thread_num()].add_red(pixels[red_channel][i]);
+            h[omp_get_thread_num()].add_green(pixels[green_channel][i]);
+            h[omp_get_thread_num()].add_blue(pixels[blue_channel][i]);
+        }
+    }
+    histo.merge_histos(h, nthreads);
   return histo;
 }
 
