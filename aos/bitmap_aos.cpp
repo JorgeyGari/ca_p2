@@ -108,7 +108,9 @@ namespace images::aos {
   histogram bitmap_aos::generate_histogram() const noexcept {
     histogram histo;
     const int pixel_count = width() * height();
+#pragma omp parallel for default(none) shared(pixel_count, histo)
     for (int i = 0; i < pixel_count; ++i) {
+//#pragma omp critical
       histo.add_color(pixels[i]);
     }
     return histo;
