@@ -121,7 +121,7 @@ namespace images::aos {
 
 #pragma omp parallel default(none) shared(pixel_count, h)
       {
-    #pragma omp for //default(none) shared(pixel_count, histo)
+    #pragma omp for
       for (i = 0; i < pixel_count; ++i) {
           h[omp_get_thread_num()].add_color(pixels[i]);
       }
